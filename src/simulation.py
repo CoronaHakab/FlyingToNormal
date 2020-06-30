@@ -61,13 +61,8 @@ class Simulation:
                 self.array[index] *= self.consts.Pd
 
     def count_new_infected(self):
-        if self.is_stochastic:
-            contagious_amount = np.sum(self.array[-self.consts.pre_length:])
-            rolls = np.random.random(contagious_amount)
-            self.infected += np.count_nonzero(rolls <= self.consts.daily_R0)
-        else:
-            for index in range(self.consts.pre_length):
-                self.infected += self.consts.daily_R0 * self.array[-index - 1]
+        for index in range(self.consts.pre_length):
+            self.infected += self.consts.daily_R0 * self.array[-index - 1]
 
     def __str__(self):
         return f"consts: {self.consts} \ntests policy: {self.tests_policy}\n" \

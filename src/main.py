@@ -4,8 +4,8 @@ from src.simulation import Simulation
 import matplotlib.pyplot as plt
 
 
-def print_categories_boundaries(people_per_simulation: int = 100_000, R0_low: float = 1.0, R0_high: float = 2.0,
-                                is_stochastic: bool = False):
+def print_categories_boundaries(people_per_simulation: int = 100_000, R0_low: float = 1.0, R0_high: float = 3,
+                                is_stochastic: bool = True):
     print("\nprinting categories boundaries:\n")
 
     def print_color_range(color: str, low_simulation: Simulation, high_simulation: Simulation):
@@ -50,18 +50,20 @@ def print_categories_boundaries(people_per_simulation: int = 100_000, R0_low: fl
     print_color_range("red", red_min, red_max)
 
 
-def test_categories_affect():
+def test_categories_affect(is_stochastic: bool = False):
+    print("\nprinting protocols comparison:\n")
     people_per_simulation = 100_000
-    consts = Consts(P_per_milion_per_week=2000)
+    consts = Consts(positive_tests_percent=2)
+    print(consts)
 
-    green = Simulation(consts, TestPolicies.GREEN, people_per_simulation)
-    yellow = Simulation(consts, TestPolicies.YELLOW, people_per_simulation)
-    orange = Simulation(consts, TestPolicies.ORANGE, people_per_simulation)
-    red = Simulation(consts, TestPolicies.RED, people_per_simulation)
+    green = Simulation(consts, TestPolicies.GREEN, people_per_simulation, is_stochastic=is_stochastic)
+    yellow = Simulation(consts, TestPolicies.YELLOW, people_per_simulation, is_stochastic=is_stochastic)
+    orange = Simulation(consts, TestPolicies.ORANGE, people_per_simulation, is_stochastic=is_stochastic)
+    red = Simulation(consts, TestPolicies.RED, people_per_simulation, is_stochastic=is_stochastic)
 
-    print(f"green: {green} \nyellow : {yellow} \norange : {orange} \nred :{red}")
+    print(f"green: {green.infected} \nyellow : {yellow.infected} \norange : {orange.infected} \nred : {red.infected}")
 
 
 if __name__ == "__main__":
-    print_categories_boundaries()
+    print_categories_boundaries(is_stochastic=False)
     # test_categories_affect()

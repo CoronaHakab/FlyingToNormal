@@ -1,6 +1,7 @@
 from src.consts import Consts
 from src.tests_policy import TestPolicies
 from src.simulation import Simulation
+import matplotlib.pyplot as plt
 
 
 def test_total_infected_per_category():
@@ -27,10 +28,10 @@ def test_total_infected_per_category():
     red_max = Simulation(red_max_consts, TestPolicies.RED, people_per_simulation)
 
     print(
-        f"green min: {green_min.infected} \nyellow min: {yellow_min.infected} \norange min: {orange_min.infected} \nred min: {red_min.infected}")
+        f"green min: \n{green_min} \nyellow min: \n{yellow_min} \norange min: \n{orange_min} \nred min: \n{red_min}")
     print()
     print(
-        f"green max: {green_max.infected} \nyellow max: {yellow_max.infected} \norange max: {orange_max.infected} \nred max: {red_max.infected}")
+        f"green max: \n{green_max} \nyellow max: \n{yellow_max} \norange max: \n{orange_max} \nred max: \n{red_max}")
 
 
 def test_categories_affect():
@@ -42,7 +43,7 @@ def test_categories_affect():
     orange = Simulation(consts, TestPolicies.ORANGE, people_per_simulation)
     red = Simulation(consts, TestPolicies.RED, people_per_simulation)
 
-    print(f"green: {green.infected} \nyellow : {yellow.infected} \norange : {orange.infected} \nred :{red.infected}")
+    print(f"green: {green} \nyellow : {yellow} \norange : {orange} \nred :{red}")
 
 
 if __name__ == "__main__":

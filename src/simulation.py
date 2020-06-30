@@ -7,7 +7,8 @@ class Simulation:
                  "tests_policy",
                  "array",
                  "infected",
-                 "people")
+                 "people",
+                 "initial_patients")
 
     def __init__(self, consts: Consts, tests_policy: TestPolicies, people: int):
         self.consts = consts
@@ -22,6 +23,7 @@ class Simulation:
         if -1 in self.tests_policy.value:
             sick_amount *= (1 - self.consts.Pd)
         self.array = [sick_amount / self.consts.total_length] * self.consts.total_length
+        self.initial_patients = sum(self.array)
 
     def run_days(self):
         for i in range(self.consts.total_length):
@@ -35,3 +37,7 @@ class Simulation:
             self.array[0] = 0
             for index in range(1, len(self.array)):
                 self.array[-index] = self.array[-index - 1]
+
+    def __str__(self):
+        return f"consts: {self.consts} \ntests policy: {self.tests_policy}\n" \
+               f"initial patients: {self.initial_patients}, first circle infections: {self.infected}"

@@ -28,11 +28,11 @@ class Simulation:
         # initialize array
         if self.is_stochastic:
             sick_rolls = np.random.random(self.people)
-            sick_amount = np.count_nonzero((sick_rolls <= self.consts.Pi))
+            sick_amount = np.count_nonzero((sick_rolls <= self.consts.chance_to_be_sick))
             day_rolls = np.random.randint(0, self.consts.total_length, sick_amount)
             self.array = np.bincount(day_rolls, minlength=self.consts.total_length)
         else:
-            sick_amount = self.people * self.consts.Pi
+            sick_amount = self.people * self.consts.chance_to_be_sick
             self.array = np.array([sick_amount / self.consts.total_length] * self.consts.total_length)
 
         if -1 in self.tests_policy.value:

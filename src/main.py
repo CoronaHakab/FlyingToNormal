@@ -4,34 +4,50 @@ from src.simulation import Simulation
 import matplotlib.pyplot as plt
 
 
-def test_total_infected_per_category():
-    people_per_simulation = 100_000
+def print_categories_boundaries(people_per_simulation: int = 100_000, R0_low: float = 1.0, R0_high: float = 2.0,
+                                is_stochastic: bool = False):
+    print("\nprinting categories boundaries:\n")
 
-    green_min_consts = Consts(P_per_milion_per_week=0, R0=1)
-    green_min = Simulation(green_min_consts, TestPolicies.GREEN, people_per_simulation)
-    green_max_consts = Consts(P_per_milion_per_week=1500, R0=3)
-    green_max = Simulation(green_max_consts, TestPolicies.GREEN, people_per_simulation)
+    def print_color_range(color: str, low_simulation: Simulation, high_simulation: Simulation):
+        print(f"\ncategory {color} boundaries:\n"
+              f"incoming sicks: \t {low_simulation.initial_patients} - {high_simulation.initial_patients}\n"
+              f"first circles infections: \t {low_simulation.infected} - {high_simulation.infected}")
 
-    yellow_min_consts = Consts(P_per_milion_per_week=1500, R0=1)
-    yellow_min = Simulation(yellow_min_consts, TestPolicies.YELLOW, people_per_simulation)
-    yellow_max_consts = Consts(P_per_milion_per_week=10000, R0=3)
-    yellow_max = Simulation(yellow_max_consts, TestPolicies.YELLOW, people_per_simulation)
+    # green
+    min_percent = 0
+    max_percent = 1
+    green_min_consts = Consts(positive_tests_percent=min_percent, R0=R0_low)
+    green_min = Simulation(green_min_consts, TestPolicies.GREEN, people_per_simulation, is_stochastic=is_stochastic)
+    green_max_consts = Consts(positive_tests_percent=max_percent, R0=R0_high)
+    green_max = Simulation(green_max_consts, TestPolicies.GREEN, people_per_simulation, is_stochastic=is_stochastic)
+    print_color_range("green", green_min, green_max)
 
-    orange_min_consts = Consts(P_per_milion_per_week=10000, R0=1)
-    orange_min = Simulation(orange_min_consts, TestPolicies.ORANGE, people_per_simulation)
-    orange_max_consts = Consts(P_per_milion_per_week=50000, R0=3)
-    orange_max = Simulation(orange_max_consts, TestPolicies.ORANGE, people_per_simulation)
+    # yellow
+    min_percent = 1
+    max_percent = 5
+    yellow_min_consts = Consts(positive_tests_percent=min_percent, R0=R0_low)
+    yellow_min = Simulation(yellow_min_consts, TestPolicies.YELLOW, people_per_simulation, is_stochastic=is_stochastic)
+    yellow_max_consts = Consts(positive_tests_percent=max_percent, R0=R0_high)
+    yellow_max = Simulation(yellow_max_consts, TestPolicies.YELLOW, people_per_simulation, is_stochastic=is_stochastic)
+    print_color_range("yellow", yellow_min, yellow_max)
 
-    red_min_consts = Consts(P_per_milion_per_week=50000, R0=1)
-    red_min = Simulation(red_min_consts, TestPolicies.RED, people_per_simulation)
-    red_max_consts = Consts(P_per_milion_per_week=200000, R0=3)
-    red_max = Simulation(red_max_consts, TestPolicies.RED, people_per_simulation)
+    # orange
+    min_percent = 5
+    max_percent = 20
+    orange_min_consts = Consts(positive_tests_percent=min_percent, R0=R0_low)
+    orange_min = Simulation(orange_min_consts, TestPolicies.ORANGE, people_per_simulation, is_stochastic=is_stochastic)
+    orange_max_consts = Consts(positive_tests_percent=max_percent, R0=R0_high)
+    orange_max = Simulation(orange_max_consts, TestPolicies.ORANGE, people_per_simulation, is_stochastic=is_stochastic)
+    print_color_range("orange", orange_min, orange_max)
 
-    print(
-        f"green min: \n{green_min} \nyellow min: \n{yellow_min} \norange min: \n{orange_min} \nred min: \n{red_min}")
-    print()
-    print(
-        f"green max: \n{green_max} \nyellow max: \n{yellow_max} \norange max: \n{orange_max} \nred max: \n{red_max}")
+    # red
+    min_percent = 20
+    max_percent = 60
+    red_min_consts = Consts(positive_tests_percent=min_percent, R0=R0_low)
+    red_min = Simulation(red_min_consts, TestPolicies.RED, people_per_simulation, is_stochastic=is_stochastic)
+    red_max_consts = Consts(positive_tests_percent=max_percent, R0=R0_high)
+    red_max = Simulation(red_max_consts, TestPolicies.RED, people_per_simulation, is_stochastic=is_stochastic)
+    print_color_range("red", red_min, red_max)
 
 
 def test_categories_affect():
@@ -47,6 +63,5 @@ def test_categories_affect():
 
 
 if __name__ == "__main__":
-    test_total_infected_per_category()
+    print_categories_boundaries()
     # test_categories_affect()
-

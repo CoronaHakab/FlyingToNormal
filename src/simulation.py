@@ -62,7 +62,7 @@ class Simulation:
 
     def count_new_infected(self):
         if self.is_stochastic:
-            contagious_amount = np.sum(self.array[-self.consts.pre_length: -1])
+            contagious_amount = np.sum(self.array[-self.consts.pre_length:])
             rolls = np.random.random(contagious_amount)
             self.infected += np.count_nonzero(rolls <= self.consts.daily_R0)
         else:

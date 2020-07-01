@@ -9,7 +9,7 @@ class Consts:
     Pd: float = 0.7
     R0: float = 2.0
     K: float = 1/80     # tests per million per day
-    positive_tests_percent: float = 1    # represents percent
+    positive_tests_percent: float = 1    # represents percentage
     Rl: int = 1
 
     @property
@@ -23,6 +23,10 @@ class Consts:
     @property
     def chance_to_be_sick(self):
         return self.positive_tests_percent / 100 * self.K * self.total_length
+
+    @property
+    def daily_chance_to_be_sick(self):
+        return self.positive_tests_percent / 100 * self.K
 
 
 if __name__ == "__main__":

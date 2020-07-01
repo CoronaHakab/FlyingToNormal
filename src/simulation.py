@@ -47,9 +47,9 @@ class Simulation:
             # count infections
             self.count_new_infected()
             # progress day
-            self.array[0] = 0
             for index in range(1, len(self.array)):
                 self.array[-index] = self.array[-index - 1]
+            self.array[0] = 0
 
     # todo use daily Pd
     def perform_tests(self):

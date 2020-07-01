@@ -1,11 +1,14 @@
 from dataclasses import dataclass
+from util import ProbabilityVector
+from medical import MedicalState, latent, pre_symptomatic
 
 
 @dataclass
 class Consts:
 
-    latent_length: int = 3
-    pre_length: int = 3
+    latent_state: MedicalState = latent
+    pre_symptomatic_state: MedicalState = pre_symptomatic
+    # symptomatic_state
     Pd: float = 0.7
     R0: float = 2.0
     K: float = 1/80     # tests per million per day
@@ -13,16 +16,8 @@ class Consts:
     Rl: int = 1
 
     @property
-    def total_length(self):
-        return self.latent_length + self.pre_length
-
-    @property
-    def daily_R0(self):
-        return self.R0 / self.pre_length
-
-    @property
-    def chance_to_be_sick(self):
-        return self.positive_tests_percent / 100 * self.K * self.total_length
+    def maximum_length_till_symptoms(self):
+        return self.latent_state.max_length + self.pre_symptomatic_state.max_length
 
     @property
     def daily_chance_to_be_sick(self):

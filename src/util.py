@@ -24,7 +24,7 @@ class ProbabilityVector:
         if np.sum(array) != total_value:
             array[-1] = total_value - np.sum(array[:-1])
 
-    def roll(self, shape: int = 1) -> np.ndarray:
+    def roll(self, shape: int = 1) -> Union[np.ndarray, int]:
         return np.random.choice(self.options, size=shape, p=self.probabilities)
 
     def max_value(self):

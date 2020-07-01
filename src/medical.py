@@ -30,6 +30,8 @@ class MedicalState:
     def max_length(self) -> int:
         return self.length_pv.max_value()
 
+    def roll_length(self) -> int:
+        return self.length_pv.roll()
 
 # todo add this
 # symptomatic_length_pv = ProbabilityVector(np.arrange())

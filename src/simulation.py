@@ -15,7 +15,8 @@ class Simulation:
                  "infected",
                  "people",
                  "initial_patients",
-                 "is_stochastic")
+                 "is_stochastic",
+                 "out_of_border_caught")
 
     def __init__(self, consts: Consts, tests_policy: TestPolicies, people: int, is_stochastic: bool = True):
         # initialize things
@@ -40,10 +41,12 @@ class Simulation:
                     new_agents.add(agent)
             self.agents.update(new_agents)
 
+        self.out_of_border_caught = len(self.agents)
         # check if was tested before flight. if so, reduces number of agents
         if -1 in self.tests_policy.value:
             self.perform_tests()
         self.initial_patients = len(self.agents)
+        self.out_of_border_caught -= self.initial_patients
 
     def run_days(self):
         days_since_landing = 1

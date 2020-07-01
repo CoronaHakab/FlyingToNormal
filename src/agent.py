@@ -38,4 +38,7 @@ class Agent:
             self.test_for_state_transition()
             if self.medical_state is None:
                 return False
+            if np.random.random() < self.medical_state.self_quarantine_chance:
+                self.medical_state = None
+                return False
         return True

@@ -95,8 +95,9 @@ def optimize_two_tests(runs_per_simulation: int = 5):
     days = consts.maximum_length_till_symptoms + 1
     # days = 7
     results = np.zeros(shape=(days + 1, days + 1))
-    for day1 in range(1, days + 1):
-        for day2 in range(1, days + 1):
+    for day1 in range(0, days + 1):
+        print(day1)
+        for day2 in range(0, days + 1):
             sum = 0
             for _ in range(runs_per_simulation):
                 test_policy = Policy([day1, day2])
@@ -105,7 +106,7 @@ def optimize_two_tests(runs_per_simulation: int = 5):
             results[day1, day2] = sum / runs_per_simulation
 
     cmap = matplotlib.colors.LinearSegmentedColormap.from_list("", ["green", "yellow", "red"])
-    plt.pcolormesh(range(1, days+1), range(1, days+1), results[1:,1:], cmap=cmap)
+    plt.pcolormesh(range(0, days+1), range(0, days+1), results, cmap=cmap)
     plt.colorbar()
     plt.xlabel("day of test 1")
     plt.ylabel("day of test 2")
@@ -113,8 +114,39 @@ def optimize_two_tests(runs_per_simulation: int = 5):
     plt.show()
 
 
+def optimize_three_tests(runs_per_simulation: int = 5):
+    class Policy:
+        def __init__(self, tests):
+            self.value = tests
+
+    people_per_simulation = 100_000
+    consts = Consts(positive_tests_percent=5)
+    days = consts.maximum_length_till_symptoms + 1
+    results = np.zeros(shape=(days + 1, days + 1))
+    consts_test_day = 0
+    for day1 in range(1, days + 1):
+        print(day1)
+        for day2 in range(day1, days + 1):
+            sum = 0
+            for _ in range(runs_per_simulation):
+                test_policy = Policy([consts_test_day, day1, day2])
+                simulation = Simulation(consts=consts, tests_policy=test_policy, people=people_per_simulation)
+                sum += simulation.infected
+            results[day1, day2] = sum / runs_per_simulation
+            results[day2, day1] = sum / runs_per_simulation
+
+    cmap = matplotlib.colors.LinearSegmentedColormap.from_list("", ["green", "yellow", "red"])
+    plt.pcolormesh(range(1, days+1), range(1, days+1), results[1:, 1:], cmap=cmap)
+    plt.colorbar()
+    plt.xlabel("day of test 2")
+    plt.ylabel("day of test 3")
+    plt.title("expected number of first circle infections\ngiven the tests days in addition to a test on day 0")
+    plt.show()
+
+
 if __name__ == "__main__":
     # optimize_one_test()
     optimize_two_tests()
+    # optimize_three_tests()
     # print_categories_boundaries(is_stochastic=False)
     # test_categories_affect()

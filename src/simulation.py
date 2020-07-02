@@ -43,7 +43,7 @@ class Simulation:
 
         self.out_of_border_caught = len(self.agents)
         # check if was tested before flight. if so, reduces number of agents
-        if -1 in self.tests_policy.value:
+        if -1 in self.tests_policy.value or 0 in self.tests_policy.value:
             self.perform_tests()
         self.initial_patients = len(self.agents)
         self.out_of_border_caught -= self.initial_patients

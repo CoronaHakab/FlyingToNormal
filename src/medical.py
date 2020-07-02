@@ -46,5 +46,6 @@ pre_symptomatic = MedicalState(name="pre-symptomatic", length_pv=pre_symptomatic
 
 latent_length_pv = ProbabilityVector(13, [0.083, 0.13325, 0.16925, 0.169, 0.144,
                                           0.10675, 0.0725, 0.04675, 0.02925, 0.021, 0.01275, 0.00775, 0.00475])
-latent = MedicalState(name="latent", length_pv=latent_length_pv, contagious_factor=0, tests_pd=0.6,
+latent_pd = [0.5 * i/13 for i in range(13)]
+latent = MedicalState(name="latent", length_pv=latent_length_pv, contagious_factor=0, tests_pd=latent_pd,
                       next_state=pre_symptomatic)

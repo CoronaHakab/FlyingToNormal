@@ -2,6 +2,8 @@ from src.consts import Consts
 from src.tests_policy import TestPolicies
 from src.simulation import Simulation
 import matplotlib.pyplot as plt
+import matplotlib
+import numpy as np
 
 
 def print_categories_boundaries(people_per_simulation: int = 100_000, R0_low: float = 1.0, R0_high: float = 3,
@@ -64,6 +66,51 @@ def test_categories_affect(is_stochastic: bool = False):
     print(f"green: {green.infected} \nyellow : {yellow.infected} \norange : {orange.infected} \nred : {red.infected}")
 
 
+def optimize_one_test():
+    class Policy:
+        def __init__(self, tests):
+            self.value = tests
+
+    people_per_simulation = 100_000
+    consts = Consts(positive_tests_percent=2.5)
+    results = {}
+    for day in range(1, consts.maximum_length_till_symptoms + 1):
+        test_policy = Policy([day])
+        simulation = Simulation(consts=consts, tests_policy=test_policy, people=people_per_simulation)
+        results[day] = simulation.infected
+    plt.plot(list(results.keys()), list(results.values()))
+    plt.xlabel("day of test")
+    plt.ylabel("total first circle infections")
+    plt.title("optimize testing day")
+    plt.show()
+
+
+def optimize_two_tests():
+    class Policy:
+        def __init__(self, tests):
+            self.value = tests
+
+    people_per_simulation = 100_000
+    consts = Consts(positive_tests_percent=5)
+    days = consts.maximum_length_till_symptoms + 1
+    # days = 7
+    results = np.zeros(shape=(days + 1, days + 1))
+    for day1 in range(1, days + 1):
+        for day2 in range(1, days + 1):
+            test_policy = Policy([day1, day2])
+            simulation = Simulation(consts=consts, tests_policy=test_policy, people=people_per_simulation)
+            results[day1, day2] = simulation.infected
+
+    cmap = matplotlib.colors.LinearSegmentedColormap.from_list("", ["green", "yellow", "red"])
+    plt.pcolormesh(range(1, days+1), range(1, days+1), results[1:,1:], cmap=cmap)
+    plt.colorbar()
+    plt.xlabel("day of test 1")
+    plt.ylabel("day of test 2")
+    plt.title("expected number of first circle infections\ngiven the tests days")
+    plt.show()
+
 if __name__ == "__main__":
-    print_categories_boundaries(is_stochastic=False)
+    # optimize_one_test()
+    optimize_two_tests()
+    # print_categories_boundaries(is_stochastic=False)
     # test_categories_affect()

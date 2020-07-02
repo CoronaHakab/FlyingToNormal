@@ -85,7 +85,7 @@ def optimize_one_test():
     plt.show()
 
 
-def optimize_two_tests():
+def optimize_two_tests(runs_per_simulation: int = 5):
     class Policy:
         def __init__(self, tests):
             self.value = tests
@@ -97,9 +97,12 @@ def optimize_two_tests():
     results = np.zeros(shape=(days + 1, days + 1))
     for day1 in range(1, days + 1):
         for day2 in range(1, days + 1):
-            test_policy = Policy([day1, day2])
-            simulation = Simulation(consts=consts, tests_policy=test_policy, people=people_per_simulation)
-            results[day1, day2] = simulation.infected
+            sum = 0
+            for _ in range(runs_per_simulation):
+                test_policy = Policy([day1, day2])
+                simulation = Simulation(consts=consts, tests_policy=test_policy, people=people_per_simulation)
+                sum += simulation.infected
+            results[day1, day2] = sum / runs_per_simulation
 
     cmap = matplotlib.colors.LinearSegmentedColormap.from_list("", ["green", "yellow", "red"])
     plt.pcolormesh(range(1, days+1), range(1, days+1), results[1:,1:], cmap=cmap)
@@ -108,6 +111,7 @@ def optimize_two_tests():
     plt.ylabel("day of test 2")
     plt.title("expected number of first circle infections\ngiven the tests days")
     plt.show()
+
 
 if __name__ == "__main__":
     # optimize_one_test()
